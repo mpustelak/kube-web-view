@@ -22,6 +22,7 @@ COPY --from=0 /usr/local/lib/python3.8/site-packages /usr/local/lib/python3.8/si
 
 # now copy the actual code we will execute (poetry install above was just for dependencies)
 COPY kube_web /kube_web
+COPY examples/oauth2-validate-github-with-users/hooks.py /
 
 ARG VERSION=dev
 

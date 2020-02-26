@@ -1449,7 +1449,9 @@ async def auth(request, handler):
             )
         except:
             original_url = "/"
-        redirect_uri = str(request.url.with_path(OAUTH2_CALLBACK_PATH))
+        redirect_uri = os.getenv("OAUTH2_REDIRECT_URL")
+        if not redirect_uri:
+            redirect_uri = str(request.url.with_path(OAUTH2_CALLBACK_PATH))
         access_token, data = await client.get_access_token(
             code, redirect_uri=redirect_uri
         )
@@ -1476,7 +1478,9 @@ async def auth(request, handler):
             client, params = await get_oauth2_client()
             # note that Google OAuth provider requires the redirect_uri here
             # (it's optional according to https://tools.ietf.org/html/rfc6749#section-4.1.1)
-            redirect_uri = str(request.url.with_path(OAUTH2_CALLBACK_PATH))
+            redirect_uri = os.getenv("OAUTH2_REDIRECT_URL")
+            if not redirect_uri:
+                redirect_uri = str(request.url.with_path(OAUTH2_CALLBACK_PATH))
             params["redirect_uri"] = redirect_uri
             # NOTE: we use urlsafe Base64 because some OAuth providers choke on certain characters
             # see https://codeberg.org/hjacobs/kube-web-view/issues/74
